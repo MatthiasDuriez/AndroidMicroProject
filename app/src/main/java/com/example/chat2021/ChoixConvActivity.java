@@ -1,13 +1,16 @@
 package com.example.chat2021;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.transition.Slide;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,7 +28,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
     private static final String CAT = "LE4-SI";
     APIInterface apiService;
     String hash;
-    Spinner listeConv;
+    AutoCompleteTextView listeConv;
     ListConversation lc;
     Button btnOK;
     int idItemSelected;
@@ -47,28 +51,24 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onResponse(Call<ListConversation> call, Response<ListConversation> response) {
                 lc = response.body();
-                List<String> spinnerArray =  new ArrayList<String>();
+                List<String> convArray =  new ArrayList<String>();
                 List<Integer> idArray = new ArrayList<Integer>();
                 for(Conversation c : lc.conversations) {
-                    spinnerArray.add(c.theme);
+                    convArray.add(c.theme);
                     idArray.add(Integer.parseInt(c.id));
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChoixConvActivity.this, android.R.layout.simple_spinner_item, spinnerArray);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChoixConvActivity.this, android.R.layout.simple_dropdown_item_1line, convArray);
+                ArrayA
                 listeConv.setAdapter(adapter);
-
-                listeConv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                        alerter("conversation sélectionnée : " + Integer.toString(idArray.get(arg2 + 1)));
-                        idItemSelected = idArray.get(arg2);
-                    }
+                listeConv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
+                    public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                        alerter("conversation sélectionnée : " + Integer.toString(idArray.get(position)));
+                        idItemSelected = idArray.get(position);
                     }
                 });
+
 
                 Log.i(CAT,lc.toString());
             }
@@ -89,6 +89,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+
         alerter("Click sur OK Conv");
         Intent change2Conv = new Intent(this,ConvActivity.class);
         Bundle bdl = new Bundle();
@@ -98,6 +99,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
         change2Conv.putExtras(bdl);
         alerter("t la"+hash+" "+Integer.toString(idItemSelected));
         startActivity(change2Conv);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     private void alerter(String s) {

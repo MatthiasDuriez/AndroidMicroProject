@@ -6,7 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,9 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -38,8 +39,8 @@ import java.net.URL;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     SharedPreferences sp;
-    EditText edtLogin;
-    EditText edtPasse;
+    TextInputEditText edtLogin;
+    TextInputEditText edtPasse;
     CheckBox cbRemember;
     Button btnOK;
     SharedPreferences.Editor editor;
@@ -116,6 +117,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             bdl.putString("hash",hash);
             iVersChoixConv.putExtras(bdl);
             startActivity(iVersChoixConv);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 
