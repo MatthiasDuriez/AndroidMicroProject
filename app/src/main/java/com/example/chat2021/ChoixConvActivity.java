@@ -58,7 +58,6 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
                     idArray.add(Integer.parseInt(c.id));
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChoixConvActivity.this, android.R.layout.simple_dropdown_item_1line, convArray);
-                ArrayA
                 listeConv.setAdapter(adapter);
                 listeConv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
