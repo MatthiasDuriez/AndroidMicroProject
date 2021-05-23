@@ -11,11 +11,14 @@
     <string name="choixConversation">Choix Conversation</string>
     <string name="conversation">Conversation</string>
     <string name="preferences">Préférences</string>
-    <string name="remember">Se souvenir de moi : </string>
+    <string name="remember">Se souvenir de moi</string>
     <string name="title_activity_preferences">Preferences</string>
     <string name="title_activity_compte">Compte</string>
     <string name="title_activity_choix_conversation">ChoixConversation</string>
     <string name="title_activity_show_conversation">ShowConversation</string>
+
+    <string name="pref_no_alpha">With no alpha</string>
+    <string name="pref_no_alpha_summary">app:colorpicker_showAlpha=\"false\"</string>
 
     <string-array name="couleurs">
         <item>red</item>

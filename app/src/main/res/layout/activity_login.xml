@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,7 +37,8 @@
                 android:id="@+id/login_edtLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp" />
+                android:layout_margin="8dp"
+                android:background="#FFFFFF" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,7 +59,9 @@
                 android:id="@+id/login_edtPasse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp" />
+                android:layout_margin="8dp"
+                android:background="#FFFFFF"
+                android:textColorHighlight="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -73,17 +77,18 @@
             android:layout_height="wrap_content"
             android:text="@string/remember"
             android:layout_margin="8dp" />
-            />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/login_btnOK"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:enabled="false"
+        android:minHeight="56dip"
         android:text="@string/ok"
-        android:layout_margin="8dp" />
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
 
     <TextView
         android:id="@+id/login_progressText"

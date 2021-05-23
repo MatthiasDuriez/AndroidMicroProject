@@ -1,20 +1,31 @@
 package com.example.chat2021;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.CompoundButtonCompat;
+
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -44,6 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     CheckBox cbRemember;
     Button btnOK;
     SharedPreferences.Editor editor;
+    ColorHandler colorHandler;
     private final String CAT = "LE4-SI";
 
     class JSONAsyncTask extends AsyncTask<String, Void, String> {
@@ -115,15 +127,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Intent iVersChoixConv = new Intent(LoginActivity.this,ChoixConvActivity.class);
             Bundle bdl = new Bundle();
             bdl.putString("hash",hash);
+            bdl.putInt("color",colorHandler.getBackgroundColor());
             iVersChoixConv.putExtras(bdl);
             startActivity(iVersChoixConv);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sp.edit();
@@ -133,11 +146,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnOK = findViewById(R.id.login_btnOK);
 
         btnOK.setOnClickListener(this);
+
+        colorHandler = new ColorHandler();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (sp.getInt("colorPreference", 0xffff0000)!=colorHandler.getBackgroundColor()){
+            colorHandler.generateOther(sp.getInt("colorPreference", 0xffff0000));
+            windowAdaptColor();
+        }
+
+        alerter("onResume called");
         // TODO: Au (re)chargement de l'activité,
         // Lire les préférences partagées
         if (sp.getBoolean("remember",false)) {
@@ -155,6 +182,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    private void windowAdaptColor() {
+        LinearLayout linearLayout1 = findViewById(R.id.LinearLayout1);
+        linearLayout1.setBackgroundColor(colorHandler.getBackgroundColor());
+        btnOK.setBackgroundColor(colorHandler.getSecondColor());
+        btnOK.setTextColor(colorHandler.getTextColor());
+        TextView titre = findViewById(R.id.login_titre);
+        titre.setTextColor(colorHandler.getComplementaryColor());
+        cbRemember.setButtonTintList(ColorStateList.valueOf(colorHandler.getComplementaryColor()));//setButtonTintList is accessible directly on API>19
+        cbRemember.setTextColor(colorHandler.getComplementaryColor());
+        edtPasse.setHintTextColor(colorHandler.getSecondColor());
+    }
 
     @Override
     public void onClick(View v) {
@@ -166,6 +204,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             editor.putString("login", edtLogin.getText().toString());
             editor.putString("passe", edtPasse.getText().toString());
             editor.commit();
+
         } else {
             editor.clear();
             editor.commit();
@@ -202,6 +241,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.action_settings :
                 alerter("Préférences");
                 // Changer d'activité pour afficher PrefsActivity
+
                 Intent change2Prefs = new Intent(this,PrefsActivity.class);
                 startActivity(change2Prefs);
                 break;
@@ -244,7 +284,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         alerter(sType);
         return bStatut;
     }
-
     public String requete(String urlData, String qs) {
         DataOutputStream dataout = null; // new:POST
         if (qs != null)

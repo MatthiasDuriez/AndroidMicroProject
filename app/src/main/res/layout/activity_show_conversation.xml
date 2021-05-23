@@ -1,61 +1,75 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout1"
+    android:id="@+id/conversationMainLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/orange"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/conversation_edtMessage"
-        style="@android:style/Widget.Material.Light.AutoCompleteTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:background="@color/blanc"
-        android:ems="10"
-        android:inputType="textMultiLine" />
-
-    <Button
-        android:id="@+id/conversation_btnOK"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:enabled="true"
-        android:text="@string/ok" />
-
-    <ScrollView
-        android:id="@+id/conversation_svMessages"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/conversation_btnOK"
-        android:layout_alignStart="@+id/conversation_titre"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/conversation_titre"
-        android:background="@color/blanc" >
-
-        <LinearLayout
-            android:id="@+id/conversation_svLayoutMessages"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-        </LinearLayout>
-    </ScrollView>
-
-    <TextView
-        android:id="@+id/conversation_titre"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/layout_group_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/conversation_btnOK"
-        android:gravity="center|center_horizontal"
-        android:text="@string/conversation"
-        android:textAlignment="gravity"
-        android:textColor="@color/blanc"
-        android:textSize="20pt" />
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-</RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_gchat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/text_gchat_indicator"
+        app:layout_constraintTop_toBottomOf="@+id/layout_group_chat" />
+
+    <TextView
+        android:id="@+id/text_gchat_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/view"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e0e0e0"
+        app:layout_constraintBottom_toTopOf="@+id/layout_gchat_chatbox" />
+
+    <RelativeLayout
+        android:id="@+id/layout_gchat_chatbox"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <Button
+            android:id="@+id/conversation_btnOK"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackground"
+            android:drawableBottom="@android:drawable/ic_menu_send"
+            android:textColor="@color/colorPrimary" />
+
+        <EditText
+            android:id="@+id/conversation_edtMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_toStartOf="@+id/conversation_btnOK"
+            android:background="@android:color/transparent"
+            android:hint="Enter Message"
+            android:inputType="text"
+            android:maxLines="6"
+            tools:ignore="Autofill" />
+
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

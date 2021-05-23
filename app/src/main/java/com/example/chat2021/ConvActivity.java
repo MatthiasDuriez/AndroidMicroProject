@@ -1,16 +1,22 @@
 package com.example.chat2021;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,21 +24,20 @@ import retrofit2.Response;
 public class ConvActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String CAT = "LE4-SI";
-    ScrollView conversation;
-    LinearLayout conversationLayout;
     APIInterface apiService;
     String hash;
     ListMessage lm;
     EditText messageBody;
     Button okBtn;
+    ColorHandler colorHandler;
     int idConversation;
+    private RecyclerView mMessageRecycler;
+    private MessageListAdapter mMessageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_conversation);
-        conversation = findViewById(R.id.conversation_svMessages);
-        conversationLayout = (LinearLayout) findViewById(R.id.conversation_svLayoutMessages);
 
         messageBody = findViewById(R.id.conversation_edtMessage);
         okBtn = findViewById(R.id.conversation_btnOK);
@@ -40,6 +45,10 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         okBtn.setOnClickListener(this);
 
         Bundle bdl = this.getIntent().getExtras();
+
+        colorHandler = new ColorHandler();
+        colorHandler.generateOther(bdl.getInt("color"));
+
         hash = bdl.getString("hash");
         apiService = APIClient.getClient().create(APIInterface.class);
         idConversation = Integer.parseInt(bdl.getString("conv"));
@@ -48,18 +57,15 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<ListMessage> call, Response<ListMessage> response) {
                 lm = response.body();
-                for(Message m : lm.messages) {
-                    TextView message = new TextView(ConvActivity.this);
-                    message.setText(m.contenu);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                    );
-                    message.setLayoutParams(params);
-                    conversationLayout.addView(message);
-                }
-
+                mMessageRecycler = (RecyclerView) findViewById(R.id.recycler_gchat);
+                mMessageAdapter = new MessageListAdapter(ConvActivity.this, lm,"tom",colorHandler.getBackgroundColor());
+                final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ConvActivity.this);
+                //linearLayoutManager.setStackFromEnd(true);
+                mMessageRecycler.setLayoutManager(linearLayoutManager);
+                mMessageRecycler.setAdapter(mMessageAdapter);
                 Log.i(CAT,lm.toString());
+                mMessageRecycler.scrollToPosition(mMessageAdapter.getItemCount()-1);
+                mMessageRecycler.setBackgroundColor(colorHandler.getBackgroundColor());
             }
 
             @Override
@@ -67,6 +73,19 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
                 call.cancel();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        windowAdaptColor();
+    }
+
+    private void windowAdaptColor() {
+        ConstraintLayout conversationMainLayout = findViewById(R.id.conversationMainLayout);
+        conversationMainLayout.setBackgroundColor(colorHandler.getBackgroundColor());
+        RelativeLayout layout_gchat_chatbox = findViewById(R.id.layout_gchat_chatbox);
+        layout_gchat_chatbox.setBackgroundColor(colorHandler.getBackgroundColor());
     }
 
     private void alerter(String s) {
@@ -78,15 +97,15 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         String contenu = messageBody.getText().toString();
-
+        Log.i(CAT,"Oui : "+contenu);
         if (contenu.length() > 0){
             Call<Message> call2 = apiService.doSetListMessage(hash, idConversation, contenu);
             call2.enqueue(new Callback<Message>() {
                 @Override
                 public void onResponse(Call<Message> call, Response<Message> response) {
-                    TextView message = new TextView(ConvActivity.this);
-                    message.setText(contenu);
-                    conversationLayout.addView(message);
+                    Message newMessage = new Message(contenu,"tom");
+                    mMessageAdapter.addItem(newMessage);
+                    messageBody.setText("");
                 }
 
                 @Override
@@ -97,4 +116,5 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
 }

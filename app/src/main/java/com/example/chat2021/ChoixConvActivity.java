@@ -1,6 +1,7 @@
 package com.example.chat2021;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -12,7 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,11 +34,14 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
     AutoCompleteTextView listeConv;
     ListConversation lc;
     Button btnOK;
+    ColorHandler colorHandler;
     int idItemSelected;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        idItemSelected = -1;
+
         setContentView(R.layout.activity_choix_conversation);
         Bundle bdl = this.getIntent().getExtras();
         Log.i(CAT,"hash : "+bdl.getString("hash"));
@@ -44,6 +50,8 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
         btnOK = findViewById(R.id.choixConversation_btnOK);
         btnOK.setOnClickListener(this);
 
+        colorHandler = new ColorHandler();
+        colorHandler.generateOther(bdl.getInt("color"));
 
         apiService = APIClient.getClient().create(APIInterface.class);
         Call<ListConversation> call1 = apiService.doGetListConversation(hash);
@@ -87,14 +95,33 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void onClick(View v) {
+    protected void onResume() {
+        super.onResume();
+        windowAdaptColor();
+    }
+    private void windowAdaptColor() {
+        LinearLayout linearLayout1 = findViewById(R.id.LinearLayout1);
+        linearLayout1.setBackgroundColor(colorHandler.getBackgroundColor());
+        btnOK.setBackgroundColor(colorHandler.getSecondColor());
+        btnOK.setTextColor(colorHandler.getTextColor());
+        TextView titre = findViewById(R.id.choixConversation_titre);
+        titre.setTextColor(colorHandler.getComplementaryColor());
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (idItemSelected == -1){
+            alerter("Veuillez séléctionner une conversation");
+            return;
+        }
         alerter("Click sur OK Conv");
         Intent change2Conv = new Intent(this,ConvActivity.class);
         Bundle bdl = new Bundle();
         // Conversation conv = (Conversation) listeConv.getSelectedItem();
         bdl.putString("conv", Integer.toString(idItemSelected));
         bdl.putString("hash", hash);
+        bdl.putInt("color",colorHandler.getBackgroundColor());
         change2Conv.putExtras(bdl);
         alerter("t la"+hash+" "+Integer.toString(idItemSelected));
         startActivity(change2Conv);
