@@ -30,6 +30,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
     EditText messageBody;
     Button okBtn;
     ColorHandler colorHandler;
+    String currentLogin;
     int idConversation;
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
@@ -49,6 +50,8 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         colorHandler = new ColorHandler();
         colorHandler.generateOther(bdl.getInt("color"));
 
+        currentLogin = bdl.getString("login");
+
         hash = bdl.getString("hash");
         apiService = APIClient.getClient().create(APIInterface.class);
         idConversation = Integer.parseInt(bdl.getString("conv"));
@@ -58,7 +61,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<ListMessage> call, Response<ListMessage> response) {
                 lm = response.body();
                 mMessageRecycler = (RecyclerView) findViewById(R.id.recycler_gchat);
-                mMessageAdapter = new MessageListAdapter(ConvActivity.this, lm,"tom",colorHandler.getBackgroundColor());
+                mMessageAdapter = new MessageListAdapter(ConvActivity.this, lm,currentLogin,colorHandler.getBackgroundColor());
                 final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ConvActivity.this);
                 //linearLayoutManager.setStackFromEnd(true);
                 mMessageRecycler.setLayoutManager(linearLayoutManager);

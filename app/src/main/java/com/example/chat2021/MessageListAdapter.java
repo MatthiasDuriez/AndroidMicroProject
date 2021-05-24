@@ -98,7 +98,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getContenu());
             nameText.setText(message.getAuteur());
             messageText.setTextColor(colorHandler.getTextColor());
-            nameText.setTextColor(colorHandler.getSecondColor());
+            nameText.setTextColor(colorHandler.getComplementaryColor());
             card.setCardBackgroundColor(colorHandler.getSecondColor());
         }
     }

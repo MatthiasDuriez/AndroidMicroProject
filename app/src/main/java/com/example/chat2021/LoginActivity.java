@@ -128,6 +128,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Bundle bdl = new Bundle();
             bdl.putString("hash",hash);
             bdl.putInt("color",colorHandler.getBackgroundColor());
+            bdl.putString("login",edtLogin.getText().toString());
+            Log.i("LE4","Le login est :"+edtLogin.getText().toString());
             iVersChoixConv.putExtras(bdl);
             startActivity(iVersChoixConv);
         }
@@ -191,7 +193,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         titre.setTextColor(colorHandler.getComplementaryColor());
         cbRemember.setButtonTintList(ColorStateList.valueOf(colorHandler.getComplementaryColor()));//setButtonTintList is accessible directly on API>19
         cbRemember.setTextColor(colorHandler.getComplementaryColor());
-        edtPasse.setHintTextColor(colorHandler.getSecondColor());
     }
 
     @Override

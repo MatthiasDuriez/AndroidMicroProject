@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Conversation"
-        android:layout_margin="8dp" >
+        android:layout_margin="8dp">
 
         <AutoCompleteTextView
             android:id="@+id/choixConversation_choixConv"

@@ -62,20 +62,6 @@ public class ColorHandler {
         B = 255 - B;
         return R + (G << 8) + ( B << 16) + ( A << 24);
     }
-
-    /**
-     * generate the second color based on if the color is dark or not
-     * @param isDark
-     */
-    private int generateSecondColor(boolean isDark,int color) {
-        float coeff = 0.2f;
-        if (isDark)
-            coeff = 1.2f;
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] *= coeff;
-        return Color.HSVToColor(hsv);
-    }
     /**
      * Lightens a color by a given factor.
      *

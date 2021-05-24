@@ -35,6 +35,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
     ListConversation lc;
     Button btnOK;
     ColorHandler colorHandler;
+    String currentLogin;
     int idItemSelected;
 
     @Override
@@ -52,6 +53,8 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
 
         colorHandler = new ColorHandler();
         colorHandler.generateOther(bdl.getInt("color"));
+
+        currentLogin = bdl.getString("login");
 
         apiService = APIClient.getClient().create(APIInterface.class);
         Call<ListConversation> call1 = apiService.doGetListConversation(hash);
@@ -122,6 +125,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
         bdl.putString("conv", Integer.toString(idItemSelected));
         bdl.putString("hash", hash);
         bdl.putInt("color",colorHandler.getBackgroundColor());
+        bdl.putString("login",currentLogin);
         change2Conv.putExtras(bdl);
         alerter("t la"+hash+" "+Integer.toString(idItemSelected));
         startActivity(change2Conv);
