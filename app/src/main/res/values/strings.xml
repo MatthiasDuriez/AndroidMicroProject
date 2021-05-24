@@ -12,6 +12,7 @@
     <string name="conversation">Conversation</string>
     <string name="preferences">Préférences</string>
     <string name="remember">Se souvenir de moi</string>
+    <string name="display">Afficher les conversations inactives</string>
     <string name="title_activity_preferences">Preferences</string>
     <string name="title_activity_compte">Compte</string>
     <string name="title_activity_choix_conversation">ChoixConversation</string>

@@ -17,6 +17,12 @@ interface APIInterface {
     @GET("conversations")
     Call<ListConversation> doGetListConversation(@Header("hash") String hash);
 
+    @GET("conversations?mode=actives")
+    Call<ListConversation> doGetListConversationActive(@Header("hash") String hash);
+
+    @GET("conversations?mode=inactives")
+    Call<ListConversation> doGetListConversationInactive(@Header("hash") String hash);
+
     @GET("conversations/{id}/messages")
     Call<ListMessage> doGetListMessage(@Header("hash") String hash, @Path("id") int convId);
 

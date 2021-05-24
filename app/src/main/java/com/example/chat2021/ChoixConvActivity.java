@@ -13,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
     Button btnOK;
     ColorHandler colorHandler;
     String currentLogin;
+    CheckBox displayInactive;
     int idItemSelected;
 
     @Override
@@ -50,14 +53,36 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
         listeConv = findViewById(R.id.choixConversation_choixConv);
         btnOK = findViewById(R.id.choixConversation_btnOK);
         btnOK.setOnClickListener(this);
+        displayInactive = findViewById(R.id.display_inactiveConv);
+        displayInactive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked)
+                    getConv(true);
+                else
+                    getConv(false);
+            }
+        });
 
         colorHandler = new ColorHandler();
         colorHandler.generateOther(bdl.getInt("color"));
 
         currentLogin = bdl.getString("login");
 
+        getConv(false);
+    }
+
+    protected void getConv(boolean active) {
+
         apiService = APIClient.getClient().create(APIInterface.class);
-        Call<ListConversation> call1 = apiService.doGetListConversation(hash);
+        Call<ListConversation> call1;
+
+        if (active)
+            call1 = apiService.doGetListConversationInactive(hash);
+        else
+            call1 = apiService.doGetListConversationActive(hash);
+
         call1.enqueue(new Callback<ListConversation>() {
             @Override
             public void onResponse(Call<ListConversation> call, Response<ListConversation> response) {
@@ -88,8 +113,6 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
                 call.cancel();
             }
         });
-
-
     }
 
     @Override
@@ -114,6 +137,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+
         if (idItemSelected == -1){
             alerter("Veuillez séléctionner une conversation");
             return;

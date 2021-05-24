@@ -26,7 +26,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Conversation"
+        android:hint="Conversations"
         android:layout_margin="8dp">
 
         <AutoCompleteTextView
@@ -38,6 +38,20 @@
             />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <CheckBox
+            android:id="@+id/display_inactiveConv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/display"
+            android:layout_margin="8dp" />
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"

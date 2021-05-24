@@ -1,5 +1,7 @@
 package com.example.chat2021;
 
+import android.graphics.Color;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Conversation {
