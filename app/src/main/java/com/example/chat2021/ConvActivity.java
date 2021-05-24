@@ -106,7 +106,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
             call2.enqueue(new Callback<Message>() {
                 @Override
                 public void onResponse(Call<Message> call, Response<Message> response) {
-                    Message newMessage = new Message(contenu,"tom");
+                    Message newMessage = new Message(contenu,currentLogin);
                     mMessageAdapter.addItem(newMessage);
                     messageBody.setText("");
                 }
