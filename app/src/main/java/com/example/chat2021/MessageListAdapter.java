@@ -22,6 +22,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private ListMessage mMessageList;
     private String login;
     private ColorHandler colorHandler;
+
     public MessageListAdapter(Context context, ListMessage messageList, String CurrentLogin, int backGroundColor) {
         mContext = context;
         mMessageList = messageList;
@@ -42,12 +43,17 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         View view;
 
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
+
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.own_message, parent, false);
+
             return new SentMessageHolder(view);
-        } else if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
+        }
+        else if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
+
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.received_message, parent, false);
+
             return new ReceivedMessageHolder(view);
         }
 
@@ -58,6 +64,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Message message = (Message) mMessageList.messages.get(position);
+
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
                 ((SentMessageHolder) holder).bind(message);
@@ -74,11 +81,12 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         Message message = (Message) mMessageList.messages.get(position);
-        Log.i("LE4","Login : "+login+ " et login mess : "+message.getAuteur() + "et message = " + message.getContenu());
+
         if (message.getAuteur().equals(login)) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
-        } else {
+        }
+        else {
             // If some other user sent the message
             return VIEW_TYPE_MESSAGE_RECEIVED;
         }
@@ -89,6 +97,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
+
             messageText = (TextView) itemView.findViewById(R.id.text_gchat_message_other);
             nameText = (TextView) itemView.findViewById(R.id.text_gchat_user_other);
             card = itemView.findViewById(R.id.card_gchat_message_other);
@@ -102,12 +111,14 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             card.setCardBackgroundColor(colorHandler.getSecondColor());
         }
     }
+
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
         CardView card;
 
         SentMessageHolder(View itemView) {
             super(itemView);
+
             messageText = (TextView) itemView.findViewById(R.id.text_gchat_message_me);
             card = itemView.findViewById(R.id.card_gchat_message_me);
         }
@@ -115,8 +126,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getContenu());
             messageText.setTextColor(Color.BLACK);
+
             if (colorHandler.isColorDark(colorHandler.getComplementaryColor()))
                 messageText.setTextColor(Color.WHITE);
+
             card.setCardBackgroundColor(colorHandler.getComplementaryColor());
         }
     }
