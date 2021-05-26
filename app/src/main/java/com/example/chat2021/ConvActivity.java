@@ -21,6 +21,8 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +38,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
     ColorHandler colorHandler;
     String currentLogin;
     String isActive;
+    Menu Mmenu;
     int idConversation;
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
@@ -56,7 +59,6 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         colorHandler.generateOther(bdl.getInt("color"));
 
         currentLogin = bdl.getString("login");
-
         hash = bdl.getString("hash");
         isActive = bdl.getString("isActive");
         apiService = APIClient.getClient().create(APIInterface.class);
@@ -129,6 +131,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Utiliser menu.xml pour créer le menu (Préférences, Mon Compte)
         getMenuInflater().inflate(R.menu.display, menu);
+        Mmenu = menu;
         MenuItem item = menu.findItem(R.id.action_display);
         if (isActive.equals("1"))
             item.setIcon(getDrawable(R.drawable.active));
@@ -142,10 +145,47 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_display :
-
+                switchDisplay();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void switchDisplay() {
+        MenuItem item = Mmenu.findItem(R.id.action_display);
+        if (isActive.equals("1")) {
+            Call<ResponseBody> call2 = apiService.doSetInactive(hash, idConversation);
+            call2.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    isActive = "0";
+                    item.setIcon(getDrawable(R.drawable.inactive));
+                    alerter("Conversation désactivée");
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        } else {
+            Call<ResponseBody> call2 = apiService.doSetActive(hash, idConversation);
+            call2.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    isActive = "1";
+                    item.setIcon(getDrawable(R.drawable.active));
+                    alerter("Conversation activée");
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+        }
+
     }
 
 }

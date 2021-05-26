@@ -105,9 +105,6 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
                         isActive = lc.conversations.get(position).getIsActive();
                     }
                 });
-
-
-                Log.i(CAT,lc.toString());
             }
 
             @Override
@@ -120,13 +117,17 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onStart() {
         super.onStart();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         windowAdaptColor();
+        getConv(false);
+        displayInactive.setChecked(false);
     }
+
     private void windowAdaptColor() {
         LinearLayout linearLayout1 = findViewById(R.id.LinearLayout1);
         linearLayout1.setBackgroundColor(colorHandler.getBackgroundColor());
