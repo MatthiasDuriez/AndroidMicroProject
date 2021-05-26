@@ -1,5 +1,7 @@
 package com.example.chat2021;
 
+import android.graphics.Color;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Conversation {
@@ -7,6 +9,10 @@ public class Conversation {
     @SerializedName("active")
     String isActive;
     String theme;
+
+    public String getIsActive() {
+        return  this.isActive;
+    }
 
     @Override
     public String toString() {

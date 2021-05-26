@@ -17,11 +17,23 @@ interface APIInterface {
     @GET("conversations")
     Call<ListConversation> doGetListConversation(@Header("hash") String hash);
 
+    @GET("conversations?mode=actives")
+    Call<ListConversation> doGetListConversationActive(@Header("hash") String hash);
+
+    @GET("conversations?mode=inactives")
+    Call<ListConversation> doGetListConversationInactive(@Header("hash") String hash);
+
     @GET("conversations/{id}/messages")
     Call<ListMessage> doGetListMessage(@Header("hash") String hash, @Path("id") int convId);
 
     @POST("conversations/{id}/messages")
     Call<Message> doSetListMessage(@Header("hash") String hash, @Path("id") int convId,@Query("contenu") String contenu);
+
+    @PUT("conversations/{id}?mode=active")
+    Call<ResponseBody> doSetActive(@Header("hash") String hash, @Path("id") int convId);
+
+    @PUT("conversations/{id}?mode=inactive")
+    Call<ResponseBody> doSetInactive(@Header("hash") String hash, @Path("id") int convId);
 
     /*
     //  req. GET : @Query
