@@ -39,6 +39,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
     ColorHandler colorHandler;
     String currentLogin;
     CheckBox displayInactive;
+    String isActive;
     int idItemSelected;
 
     @Override
@@ -101,6 +102,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
                     public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
                         alerter("conversation sélectionnée : " + Integer.toString(idArray.get(position)));
                         idItemSelected = idArray.get(position);
+                        isActive = lc.conversations.get(position).getIsActive();
                     }
                 });
 
@@ -150,6 +152,7 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
         bdl.putString("hash", hash);
         bdl.putInt("color",colorHandler.getBackgroundColor());
         bdl.putString("login",currentLogin);
+        bdl.putString("isActive", isActive);
         change2Conv.putExtras(bdl);
         alerter("t la"+hash+" "+Integer.toString(idItemSelected));
         startActivity(change2Conv);

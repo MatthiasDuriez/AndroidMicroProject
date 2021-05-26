@@ -2,9 +2,13 @@ package com.example.chat2021;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +35,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
     Button okBtn;
     ColorHandler colorHandler;
     String currentLogin;
+    String isActive;
     int idConversation;
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
@@ -53,6 +58,7 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         currentLogin = bdl.getString("login");
 
         hash = bdl.getString("hash");
+        isActive = bdl.getString("isActive");
         apiService = APIClient.getClient().create(APIInterface.class);
         idConversation = Integer.parseInt(bdl.getString("conv"));
         Call<ListMessage> call1 = apiService.doGetListMessage(hash, Integer.parseInt(bdl.getString("conv")));
@@ -117,7 +123,29 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Utiliser menu.xml pour créer le menu (Préférences, Mon Compte)
+        getMenuInflater().inflate(R.menu.display, menu);
+        MenuItem item = menu.findItem(R.id.action_display);
+        if (isActive.equals("1"))
+            item.setIcon(getDrawable(R.drawable.active));
+        else
+            item.setIcon(getDrawable(R.drawable.inactive));
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_display :
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

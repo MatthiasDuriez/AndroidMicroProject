@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">Chat2021</string>
     <string name="action_settings">Préférences</string>
+    <string name="action_display">Paramètres</string>
     <string name="action_account">Mon Compte</string>
     <string name="titre">LE4-SI-Chat !</string>
     <string name="login">Login : </string>
     <string name="passe">Mot de passe : </string>
+    <string name="display_title">display_icon</string>
     <string name="ok">OK</string>
     <string name="monCompte">Mon Compte</string>
     <string name="couleur">Couleur Préférée : </string>
@@ -29,4 +31,13 @@
 
     <string name="title_activity_choix_conv">ChoixConvActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_parametres">ParametresActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

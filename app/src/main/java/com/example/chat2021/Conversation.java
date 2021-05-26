@@ -10,6 +10,10 @@ public class Conversation {
     String isActive;
     String theme;
 
+    public String getIsActive() {
+        return  this.isActive;
+    }
+
     @Override
     public String toString() {
         return "Conversation{" +
