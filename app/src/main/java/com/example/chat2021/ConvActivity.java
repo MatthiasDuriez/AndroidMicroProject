@@ -54,8 +54,8 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         okBtn.setOnClickListener(this);
         colorHandler = new ColorHandler();
 
+        // Récupération des informations du bundle
         Bundle bdl = this.getIntent().getExtras();
-
         colorHandler.generateOther(bdl.getInt("color"));
         currentLogin = bdl.getString("login");
         hash = bdl.getString("hash");
@@ -110,6 +110,11 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         t.show();
     }
 
+    /**
+     * Quand on clique sur le bouton "envoyer le message", s'il y a du contenu dans le champ texte
+     * on ajoute le message dans la conversation
+     * @param v
+     */
     @Override
     public void onClick(View v) {
 
@@ -139,6 +144,8 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         getMenuInflater().inflate(R.menu.display, menu);
         MenuItem item = menu.findItem(R.id.action_display);
 
+        // Si la conversation est active au chargement du menu, on affiche un oeuil blanc,
+        // sinon un oeil rouge
         if (isActive.equals("1"))
             item.setIcon(getDrawable(R.drawable.active));
         else
@@ -147,6 +154,11 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    /**
+     * Quand on clique sur l'oeil du menu, on switch l'état de la conversation
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switchDisplay();
@@ -154,6 +166,10 @@ public class ConvActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Si la conversation était active, on inverse tous les états (oeil devient rouge, on la désactive en base...)
+     * et inversement
+     */
     private void switchDisplay() {
         MenuItem item = Mmenu.findItem(R.id.action_display);
 

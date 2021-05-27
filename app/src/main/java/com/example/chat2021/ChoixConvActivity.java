@@ -52,17 +52,24 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
         btnOK = findViewById(R.id.choixConversation_btnOK);
         btnOK.setOnClickListener(this);
 
+        // Récupération des informations du bundle
         Bundle bdl = this.getIntent().getExtras();
         hash = bdl.getString("hash");
         currentLogin = bdl.getString("login");
 
+        // Récupération et appliquation de la fonction de la checkbox permettant de choisir l'affichage
+        // des conversations activées ou désactivées
         displayInactive = findViewById(R.id.display_inactiveConv);
         displayInactive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked) getConv(true);
-                else getConv(false);
+                // Quand l'état de la CB change, on appelle getConv() avec en paramètre un boolean
+                // indiquant si on vuet les conversations inactives ou non
+                if (isChecked)
+                    getConv(true);
+                else
+                    getConv(false);
             }
         });
 
@@ -72,13 +79,21 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
         getConv(false);
     }
 
+    /**
+     * Fonction récupère les conversations selon le paramètre (active ou inactive) et les insère
+     * dans le spinner.
+     * @param active
+     */
     protected void getConv(boolean active) {
 
         apiService = APIClient.getClient().create(APIInterface.class);
         Call<ListConversation> call1;
 
-        if (active) call1 = apiService.doGetListConversationInactive(hash);
-        else call1 = apiService.doGetListConversationActive(hash);
+        // Récupération des conversation active ou inactive
+        if (active)
+            call1 = apiService.doGetListConversationInactive(hash);
+        else
+            call1 = apiService.doGetListConversationActive(hash);
 
         call1.enqueue(new Callback<ListConversation>() {
             @Override
@@ -88,15 +103,19 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
                 List<String> convArray =  new ArrayList<String>();
                 List<Integer> idArray = new ArrayList<Integer>();
 
+                // Récupération des éléments qui nous intéresse dans un objet conversation (thème et id)
                 for(Conversation c : lc.conversations) {
                     convArray.add(c.theme);
                     idArray.add(Integer.parseInt(c.id));
                 }
 
+                // Adaptateur et ajout des thèmes dans la dropdown list
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChoixConvActivity.this, android.R.layout.simple_dropdown_item_1line, convArray);
                 listeConv.setAdapter(adapter);
                 listeConv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+                    // Quand on clique sur une conversation dans la liste, on récupère son id et
+                    // le boolean indiquant si elle est active ou non
                     @Override
                     public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
 
@@ -126,6 +145,9 @@ public class ChoixConvActivity extends AppCompatActivity implements View.OnClick
 
         windowAdaptColor();
 
+        // Quand on revient sur le menu des choix de conversations (après un retour en arrière),
+        // on remet à jour la liste des conversations pour prendre en compte l'activation ou la
+        // désactivation de cette qui était selectionnée.
         getConv(false);
         displayInactive.setChecked(false);
     }
